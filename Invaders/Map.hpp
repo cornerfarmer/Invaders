@@ -13,11 +13,14 @@ class Map
 {
 private:
 	std::vector<std::vector<std::unique_ptr<AbstractTile>>> tiles;
-	Player player;
+	int width;
+	int height;
+	sf::Vector2f tileSize;
 public:
 	Map();
 	void draw(sf::RenderWindow& window);
-	void processEvent(const sf::Event& event);
+	bool isTileWalkable(sf::Vector2i pos) const;
+	const sf::Vector2f& getTileSize() const;
 };
 
 #endif

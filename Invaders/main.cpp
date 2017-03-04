@@ -8,8 +8,7 @@
 #include "LightBulb/Random/StandardRandomGenerator.hpp"
 
 #include <SFML/Graphics.hpp>
-#include "Map.hpp"
-#include "Player.hpp"
+#include "Game.hpp"
 
 int main2()
 {
@@ -41,7 +40,7 @@ int main2()
 int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
-	Map map;
+	Game game;
 
 	while (window.isOpen())
 	{
@@ -51,11 +50,11 @@ int main()
 			if (event.type == sf::Event::Closed)
 				window.close();
 			else
-				map.processEvent(event);
+				game.processEvent(event);
 		}
 
 		window.clear();
-		map.draw(window);
+		game.draw(window);
 		window.display();
 	}
 

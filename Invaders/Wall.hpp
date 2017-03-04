@@ -8,7 +8,9 @@
 class Wall : public AbstractTile
 {
 public:
-	void draw(sf::RenderWindow& window, sf::Rect<int> pos) override;
+	Wall(const Map* map_);
+	void draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos) override;
+	bool isWalkable() override;
 };
 
 #endif

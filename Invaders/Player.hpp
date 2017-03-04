@@ -5,6 +5,8 @@
 
 #include <SFML/Graphics/Rect.hpp>
 #include <SFML/Window/Event.hpp>
+#include "AbstractDrawable.hpp"
+#include "AbstractGameObject.hpp"
 
 namespace sf {
 	class RenderWindow;
@@ -12,16 +14,21 @@ namespace sf {
 
 class Map;
 
-class Player
+enum Direction
 {
-	int posX;
-	int posY;
+	UP = 0,
+	RIGHT = 1,
+	DOWN = 2,
+	LEFT = 3
+};
+
+class Player : public AbstractDrawable, public AbstractGameObject
+{
+	Direction dir;
 	Map* map;
 public:
-	Player(Map* map, int posX_, int posY_);
-	virtual void draw(sf::RenderWindow& window, sf::Vector2f tileSize);
-	int getX();
-	int getY();
+	Player(Map* map, sf::Vector2i pos_);
+	virtual void draw(sf::RenderWindow& window);
 	void processEvent(const sf::Event& event);
 };
 

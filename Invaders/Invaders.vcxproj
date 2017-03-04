@@ -124,16 +124,22 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="AbstractDrawable.cpp" />
+    <ClCompile Include="AbstractGameObject.cpp" />
     <ClCompile Include="AbstractTile.cpp" />
     <ClCompile Include="Floor.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="Map.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="AbstractDrawable.hpp" />
+    <ClInclude Include="AbstractGameObject.hpp" />
     <ClInclude Include="AbstractTile.hpp" />
     <ClInclude Include="Floor.hpp" />
+    <ClInclude Include="Game.hpp" />
     <ClInclude Include="Map.hpp" />
     <ClInclude Include="Player.hpp" />
     <ClInclude Include="Wall.hpp" />

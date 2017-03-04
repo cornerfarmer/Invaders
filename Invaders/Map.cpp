@@ -4,10 +4,9 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 
 Map::Map()
-	: player(this, 10, 10)
 {
-	int width = 20;
-	int height = 20;
+	width = 20;
+	height = 20;
 
 	tiles.resize(width);
 
@@ -18,31 +17,35 @@ Map::Map()
 		for (int y = 0; y < height; y++)
 		{
 			if (y == 0 || y == height - 1)
-				tiles[x][y].reset(new Wall());
+				tiles[x][y].reset(new Wall(this));
 			else
-				tiles[x][y].reset(new Floor());
+				tiles[x][y].reset(new Floor(this));
 		}
 	}
 }
 
 void Map::draw(sf::RenderWindow& window)
 {
-	int tileSizeX = window.getSize().x / tiles.size();
-	int tileSizeY = window.getSize().y / tiles.size();
-	for (int x = 0; x < tiles.size(); x++)
+	tileSize = sf::Vector2f(window.getSize().x / width, window.getSize().y / height);
+	for (int x = 0; x < width; x++)
 	{
-		for (int y = 0; y < tiles[x].size(); y++)
+		for (int y = 0; y < height; y++)
 		{
-			tiles[x][y]->draw(window, sf::Rect<int>(x * tileSizeX, y * tileSizeY, tileSizeX, tileSizeY));
-			if (player.getX() == x && player.getY() == y)
-				player.draw(window, sf::Vector2f(tileSizeX, tileSizeY));
+			tiles[x][y]->draw(window, tileSize, sf::Vector2i(x, y));
 		}
 	}
 }
 
-void Map::processEvent(const sf::Event& event)
+bool Map::isTileWalkable(sf::Vector2i pos) const
 {
-	player.processEvent(event);
+	if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height)
+		return false;
+	return tiles[pos.x][pos.y]->isWalkable();
+}
+
+const sf::Vector2f& Map::getTileSize() const
+{
+	return tileSize;
 }
 
 

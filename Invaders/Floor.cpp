@@ -4,12 +4,18 @@
 #include "Wall.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
 
-void Floor::draw(sf::RenderWindow& window, sf::Rect<int> pos)
+Floor::Floor(const Map* map_)
+	:AbstractTile(map_)
 {
-	sf::RectangleShape rect(sf::Vector2f(pos.width, pos.height));
-	rect.setPosition(pos.left, pos.top);
 
-	rect.setFillColor(sf::Color(128, 128, 128));
+}
 
-	window.draw(rect);
+void Floor::draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos)
+{
+	drawTile(window, *map, pos, sf::Color(128, 128, 128));
+}
+
+bool Floor::isWalkable()
+{
+	return true;
 }

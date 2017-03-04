@@ -2,46 +2,55 @@
 #include <SFML/Graphics/Color.hpp>
 #include <SFML/Graphics/RectangleShape.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "Map.hpp"
 
-Player::Player(Map* map_, int posX_, int posY_)
+Player::Player(Map* map_, sf::Vector2i pos_)
+	:AbstractGameObject(pos_)
 {
 	map = map_;
-	posX = posX_;
-	posY = posY_;
+	dir = RIGHT;
 }
 
-void Player::draw(sf::RenderWindow& window, sf::Vector2f tileSize)
+void Player::draw(sf::RenderWindow& window)
 {
-	sf::RectangleShape rect(tileSize);
-	rect.setPosition(tileSize.x * posX, tileSize.y * posY);
+	drawTile(window, *map, getPos(), sf::Color::Red);
 
-	rect.setFillColor(sf::Color::Red);
+	sf::RectangleShape rectHead(sf::Vector2f(map->getTileSize().x * 0.6, map->getTileSize().y * 0.2));
+	rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x, map->getTileSize().y * getPos().y);
 
-	window.draw(rect);
-}
+	sf::Transform transform;
+	transform.rotate(dir * 90, sf::Vector2f(map->getTileSize().x * getPos().x + map->getTileSize().x / 2, map->getTileSize().y * getPos().y + map->getTileSize().y / 2));
+	
+	rectHead.setFillColor(sf::Color::Yellow);
 
-
-int Player::getX()
-{
-	return posX;
-}
-
-int Player::getY()
-{
-	return posY;
+	window.draw(rectHead, transform);
 }
 
 void Player::processEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
+		sf::Vector2i nextPos = getPos();
 		if (event.key.code == sf::Keyboard::Left)
-			posX--;
+		{
+			nextPos.x--;
+			dir = LEFT;
+		}
 		if (event.key.code == sf::Keyboard::Right)
-			posX++;
+		{
+			nextPos.x++;
+			dir = RIGHT;
+		}
 		if (event.key.code == sf::Keyboard::Up)
-			posY--;
+		{
+			nextPos.y--;
+			dir = UP;
+		}
 		if (event.key.code == sf::Keyboard::Down)
-			posY++;
+		{
+			nextPos.y++;
+			dir = DOWN;
+		}
+		setPos(nextPos, *map);
 	}
 }
