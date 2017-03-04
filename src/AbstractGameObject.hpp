@@ -1,4 +1,4 @@
-[TAS#pragma once
+#pragma once
 
 #ifndef _ABSTRACTGAMEOBJECT_HPP_
 #define _ABSTRACTGAMEOBJECT_HPP_
