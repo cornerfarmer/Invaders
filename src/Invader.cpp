@@ -6,10 +6,10 @@
 #include <LightBulb/NetworkTopology/FeedForwardNetworkTopology.hpp>
 
 Invader::Invader(Map* map_, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions)
-	:AbstractGameObject(pos_), LightBulb::AbstractDefaultReinforcementIndividual(map, networkTopologyOptions, true, 0)
+	:AbstractGameObject(pos_), LightBulb::AbstractDefaultReinforcementIndividual(map, networkTopologyOptions, true)
 {
 	map = map_;
-	dir = LEFT;
+	dir = RIGHT;
 }
 
 void Invader::draw(sf::RenderWindow& window)
@@ -30,22 +30,44 @@ void Invader::draw(sf::RenderWindow& window)
 
 void Invader::interpretNNOutput(LightBulb::Vector<char>& output)
 {
-	sf::Vector2i newPos = getPos();
-	newPos.x--;
-	setPos(newPos, *map);
+	lastPos = getPos();
+	if (output.getEigenValue()[0])
+		walk(*map, dir);
+	else if (output.getEigenValue()[1])
+		walk(*map, static_cast<Direction>((dir + 1) % 4));
+	else if (output.getEigenValue()[2])
+		walk(*map, static_cast<Direction>((dir + 2) % 4));
+	else if(output.getEigenValue()[3])
+		walk(*map, static_cast<Direction>((dir + 3) % 4));
 }
 
 void Invader::getNNInput(LightBulb::Vector<>& input) const
 {
+	sf::Vector2i dirVector = getDirVector();
+	sf::Vector2i rotatedDirVector(-dirVector.y, dirVector.x);
 
+	int inputIndex = 0;
+	for (int i = 1; i >= -1; i--)
+	{
+		for (int j = 1; j >= -1; j--)
+		{
+			if (i != 0 || j != 0)
+				input.getEigenValueForEditing()[inputIndex++] = map->isTileWalkable(getPos() + i * dirVector + j * rotatedDirVector);
+		}
+	}
+
+	input.getEigenValueForEditing()[inputIndex++] = dir == DOWN || dir == LEFT ? 1 : 0;
+	input.getEigenValueForEditing()[inputIndex++] = dir == RIGHT || dir == LEFT ? 1 : 0;
+
+	input.getEigenValueForEditing()[inputIndex++] = map->getTime() / 10.0;
 }
 
 void Invader::isTerminalState(LightBulb::Scalar<char>& isTerminalState) const
 {
-
+	isTerminalState.getEigenValueForEditing() = false;
 }
 
 void Invader::getReward(LightBulb::Scalar<>& reward) const
 {
-
+	reward.getEigenValueForEditing() = lastPos.x - getPos().x;
 }

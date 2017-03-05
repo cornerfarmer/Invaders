@@ -17,6 +17,7 @@ private:
 	std::vector<std::unique_ptr<Invader>> invaders;
 	std::vector<std::unique_ptr<LightBulb::DQNLearningRule>> learningRules;
 	std::shared_ptr<LightBulb::TransitionStorage> transitionStorage;
+	void reset();
 public:
 	Game();
 	void draw(sf::RenderWindow& window);

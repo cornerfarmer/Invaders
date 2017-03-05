@@ -15,6 +15,7 @@ private:
 	std::vector<std::vector<std::unique_ptr<AbstractTile>>> tiles;
 	int width;
 	int height;
+	int time;
 	sf::Vector2f tileSize;
 public:
 	Map();
@@ -22,6 +23,8 @@ public:
 	bool isTileWalkable(sf::Vector2i pos) const;
 	const sf::Vector2f& getTileSize() const;
 	void doSimulationStep() override;
+	void reset();
+	int getTime();
 };
 
 #endif

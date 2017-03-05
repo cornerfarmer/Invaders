@@ -16,6 +16,7 @@ class Map;
 class Invader : public AbstractDrawable, public AbstractGameObject, public LightBulb::AbstractDefaultReinforcementIndividual
 {
 	Map* map;
+	sf::Vector2i lastPos;
 protected:
 	void interpretNNOutput(LightBulb::Vector<char>& output) override;
 public:

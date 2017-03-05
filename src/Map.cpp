@@ -50,5 +50,15 @@ const sf::Vector2f& Map::getTileSize() const
 
 void Map::doSimulationStep()
 {
+	time++;
+}
 
+void Map::reset()
+{
+	time = 0;
+}
+
+int Map::getTime()
+{
+	return time;
 }

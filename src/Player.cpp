@@ -30,27 +30,21 @@ void Player::processEvent(const sf::Event& event)
 {
 	if (event.type == sf::Event::KeyPressed)
 	{
-		sf::Vector2i nextPos = getPos();
 		if (event.key.code == sf::Keyboard::Left)
 		{
-			nextPos.x--;
-			dir = LEFT;
+			walk(*map, LEFT);
 		}
 		if (event.key.code == sf::Keyboard::Right)
 		{
-			nextPos.x++;
-			dir = RIGHT;
+			walk(*map, RIGHT);
 		}
 		if (event.key.code == sf::Keyboard::Up)
 		{
-			nextPos.y--;
-			dir = UP;
+			walk(*map, UP);
 		}
 		if (event.key.code == sf::Keyboard::Down)
 		{
-			nextPos.y++;
-			dir = DOWN;
+			walk(*map, DOWN);
 		}
-		setPos(nextPos, *map);
 	}
 }

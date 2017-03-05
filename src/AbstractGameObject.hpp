@@ -22,7 +22,11 @@ private:
 protected:
 	Direction dir;
 	AbstractGameObject(const sf::Vector2i& pos);
-	const sf::Vector2i getPos();
+	const sf::Vector2i getPos() const;
+	sf::Vector2i getDirVector() const;
+	void walk(const Map& map, Direction dir, int distance = 1);
+public:
+	void setDir(const Direction& dir);
 	void setPos(const sf::Vector2i& newPos, const Map& map);
 };
 
