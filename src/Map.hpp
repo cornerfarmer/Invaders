@@ -7,9 +7,9 @@
 #include <memory>
 #include "AbstractTile.hpp"
 #include "Player.hpp"
-#include <SFML/Window/Event.hpp>
+#include "LightBulb/Learning/Reinforcement/AbstractReinforcementEnvironment.hpp"
 
-class Map
+class Map : public LightBulb::AbstractReinforcementEnvironment
 {
 private:
 	std::vector<std::vector<std::unique_ptr<AbstractTile>>> tiles;
@@ -21,6 +21,7 @@ public:
 	void draw(sf::RenderWindow& window);
 	bool isTileWalkable(sf::Vector2i pos) const;
 	const sf::Vector2f& getTileSize() const;
+	void doSimulationStep() override;
 };
 
 #endif

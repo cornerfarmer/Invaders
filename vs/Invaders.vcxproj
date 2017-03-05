@@ -24,6 +24,7 @@
     <ClInclude Include="..\src\AbstractTile.hpp" />
     <ClInclude Include="..\src\Floor.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
+    <ClInclude Include="..\src\Invader.hpp" />
     <ClInclude Include="..\src\Map.hpp" />
     <ClInclude Include="..\src\Player.hpp" />
     <ClInclude Include="..\src\Wall.hpp" />
@@ -34,6 +35,7 @@
     <ClCompile Include="..\src\AbstractTile.cpp" />
     <ClCompile Include="..\src\Floor.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\Invader.cpp" />
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\Player.cpp" />

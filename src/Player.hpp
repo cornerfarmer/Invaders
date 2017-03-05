@@ -14,17 +14,8 @@ namespace sf {
 
 class Map;
 
-enum Direction
-{
-	UP = 0,
-	RIGHT = 1,
-	DOWN = 2,
-	LEFT = 3
-};
-
 class Player : public AbstractDrawable, public AbstractGameObject
 {
-	Direction dir;
 	Map* map;
 public:
 	Player(Map* map, sf::Vector2i pos_);

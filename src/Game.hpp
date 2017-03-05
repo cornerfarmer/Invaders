@@ -6,12 +6,17 @@
 #include "Player.hpp"
 #include <SFML/Window/Event.hpp>
 #include "Map.hpp"
+#include "Invader.hpp"
+#include <LightBulb/Learning/Reinforcement/DQNLearningRule.hpp>
 
 class Game
 {
 private:
 	Map map;
 	Player player;
+	std::vector<std::unique_ptr<Invader>> invaders;
+	std::vector<std::unique_ptr<LightBulb::DQNLearningRule>> learningRules;
+	std::shared_ptr<LightBulb::TransitionStorage> transitionStorage;
 public:
 	Game();
 	void draw(sf::RenderWindow& window);

@@ -48,4 +48,7 @@ const sf::Vector2f& Map::getTileSize() const
 	return tileSize;
 }
 
+void Map::doSimulationStep()
+{
 
+}
