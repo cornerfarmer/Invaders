@@ -20,7 +20,7 @@ class Player : public AbstractDrawable, public AbstractGameObject
 public:
 	Player(Map* map, sf::Vector2i pos_);
 	virtual void draw(sf::RenderWindow& window);
-	void processEvent(const sf::Event& event);
+	void step();
 };
 
 #endif

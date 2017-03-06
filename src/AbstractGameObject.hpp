@@ -21,13 +21,16 @@ private:
 	sf::Vector2i pos;
 protected:
 	Direction dir;
+	bool dead;
 	AbstractGameObject(const sf::Vector2i& pos);
-	const sf::Vector2i getPos() const;
-	sf::Vector2i getDirVector() const;
 	void walk(const Map& map, Direction dir, int distance = 1);
 public:
 	void setDir(const Direction& dir);
+	void setDead(bool dead_);
+	bool isDead();
 	void setPos(const sf::Vector2i& newPos, const Map& map);
+	const sf::Vector2i getPos() const;
+	sf::Vector2i getDirVector() const;
 };
 
 #endif 

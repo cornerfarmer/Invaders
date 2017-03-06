@@ -41,6 +41,7 @@ int main()
 {
 	sf::RenderWindow window(sf::VideoMode(800, 600), "SFML works!");
 	Game game;
+	sf::Clock clock;
 
 	while (window.isOpen())
 	{
@@ -49,9 +50,15 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			else
-				game.processEvent(event);
+			if (event.type == sf::Event::KeyPressed)
+				game.step();
 		}
+
+	/*	if (clock.getElapsedTime().asMilliseconds() > 200)
+		{
+			game.step();
+			clock.restart();
+		}*/
 
 		window.clear();
 		game.draw(window);

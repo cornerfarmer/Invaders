@@ -4,6 +4,7 @@
 AbstractGameObject::AbstractGameObject(const sf::Vector2i& pos_)
 {
 	pos = pos_;
+	dead = false;
 }
 
 const sf::Vector2i AbstractGameObject::getPos() const
@@ -48,4 +49,15 @@ void AbstractGameObject::walk(const Map& map, Direction newDir, int distance)
 void AbstractGameObject::setDir(const Direction& dir_)
 {
 	dir = dir_;
+}
+
+
+void AbstractGameObject::setDead(bool dead_)
+{
+	dead = dead_;
+}
+
+bool AbstractGameObject::isDead()
+{
+	return dead;
 }

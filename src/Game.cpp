@@ -11,39 +11,50 @@
 Game::Game()
 	:player(&map, sf::Vector2i(10, 10))
 {
+	map.addGameObject(&player);
+
 	LightBulb::DQNLearningRuleOptions options;
 	options.environment = &map;
 	options.initialExploration = 0.1;
 	options.finalExploration = 0.1;
 
 	LightBulb::FeedForwardNetworkTopologyOptions networkOptions;
-	networkOptions.neuronsPerLayerCount.push_back(11);
-	networkOptions.neuronsPerLayerCount.push_back(20);
+	networkOptions.neuronsPerLayerCount.push_back(27);
+	networkOptions.neuronsPerLayerCount.push_back(40);
 	networkOptions.neuronsPerLayerCount.push_back(4);
 
 	networkOptions.descriptionFactory = new LightBulb::DifferentNeuronDescriptionFactory(new LightBulb::NeuronDescription(new LightBulb::WeightedSumFunction(), new LightBulb::RectifierFunction()), new LightBulb::NeuronDescription(new LightBulb::WeightedSumFunction(), new LightBulb::IdentityFunction()));
 	
 	transitionStorage.reset(new LightBulb::TransitionStorage());
 
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < 5; i++)
 	{
-		invaders.push_back(std::unique_ptr<Invader>(new Invader(&map, sf::Vector2i(15, 10), networkOptions)));
+		invaders.push_back(std::unique_ptr<Invader>(new Invader(&map, sf::Vector2i(0, 0), networkOptions)));
 		options.individual = invaders.back().get();
 
 		learningRules.push_back(std::unique_ptr<LightBulb::DQNLearningRule>(new LightBulb::DQNLearningRule(options)));
 		learningRules.back()->setTransitionStorage(transitionStorage);
 		learningRules.back()->initializeTry();
+		map.addGameObject(invaders[i].get());
 	}
 
+	reset();
 }
 
 void Game::reset()
 {
 	map.reset();
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < invaders.size(); i++)
 	{
-		invaders[i]->setPos(sf::Vector2i(15, 10), map);
+		sf::Vector2i pos;
+
+		do {
+			pos = sf::Vector2i(15, rand() % map.getHeight());
+		} while (!map.isTileWalkable(pos));
+		//pos = sf::Vector2i(15, 10);
+		invaders[i]->setPos(pos, map);
 		invaders[i]->setDir(RIGHT);
+		invaders[i]->setDead(false);
 	}
 }
 
@@ -51,37 +62,43 @@ void Game::draw(sf::RenderWindow& window)
 {
 	map.draw(window);
 	player.draw(window);
-	for (int i = 0; i < 1; i++)
+	for (int i = 0; i < invaders.size(); i++)
 		invaders[i]->draw(window);
 }
 
-void Game::processEvent(const sf::Event& event)
+void Game::step()
 {
-	if (event.type == sf::Event::KeyPressed)
+	for (int i = 0; i < invaders.size(); i++)
 	{
-		for (int i = 0; i < 1; i++)
+		if (!invaders[i]->isDead())
 			invaders[i]->doSimulationStep();
+	}
 
-		map.doSimulationStep();
+	map.doSimulationStep();
 
-		player.processEvent(event);
+	player.step();
 
-		LightBulb::Scalar<> reward;
-		for (int i = 0; i < 1; i++) {
+	LightBulb::Scalar<> reward;
+	for (int i = 0; i < invaders.size(); i++) 
+	{
+		if (!invaders[i]->isDead())
+		{
+			if (abs((invaders[i]->getPos() - player.getPos()).x) + abs((invaders[i]->getPos() - player.getPos()).y) <= 1)
+				invaders[i]->setDead(true);
 			invaders[i]->getReward(reward);
 			transitionStorage->storeTransition(*invaders[i], map, reward);
 		}
+	}
 
-		if (map.getTime() >= 10)
+	if (map.getTime() >= 20)
+	{
+		reset();
+		for (int r = 0; r < 100; r++) 
 		{
-			reset();
-			for (int r = 0; r < 100; r++) 
-			{
-				for (int i = 0; i < 1; i++)
-					learningRules[i]->doSupervisedLearning();
-			}
-			for (int i = 0; i < 1; i++)
-				learningRules[i]->refreshSteadyNetwork();
+			for (int i = 0; i < invaders.size(); i++)
+				learningRules[i]->doSupervisedLearning();
 		}
+		for (int i = 0; i < invaders.size(); i++)
+			learningRules[i]->refreshSteadyNetwork();
 	}
 }

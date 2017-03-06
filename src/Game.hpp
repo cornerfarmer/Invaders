@@ -21,7 +21,7 @@ private:
 public:
 	Game();
 	void draw(sf::RenderWindow& window);
-	void processEvent(const sf::Event& event);
+	void step();
 };
 
 #endif

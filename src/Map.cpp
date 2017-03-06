@@ -40,6 +40,11 @@ bool Map::isTileWalkable(sf::Vector2i pos) const
 {
 	if (pos.x < 0 || pos.y < 0 || pos.x >= width || pos.y >= height)
 		return false;
+	for (auto gameObject = gameObjects.begin(); gameObject != gameObjects.end(); gameObject++)
+	{
+		if ((*gameObject)->getPos() == pos && !(*gameObject)->isDead())
+			return false;
+	}
 	return tiles[pos.x][pos.y]->isWalkable();
 }
 
@@ -61,4 +66,19 @@ void Map::reset()
 int Map::getTime()
 {
 	return time;
+}
+
+int Map::getHeight()
+{
+	return height;
+}
+
+int Map::getWidth()
+{
+	return width;
+}
+
+void Map::addGameObject(AbstractGameObject* newGameObject)
+{
+	gameObjects.push_back(newGameObject);
 }

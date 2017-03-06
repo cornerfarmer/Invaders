@@ -14,17 +14,20 @@ Invader::Invader(Map* map_, sf::Vector2i pos_, const LightBulb::FeedForwardNetwo
 
 void Invader::draw(sf::RenderWindow& window)
 {
-	drawTile(window, *map, getPos(), sf::Color::Red);
+	if (!dead) 
+	{
+		drawTile(window, *map, getPos(), sf::Color::Red);
 
-	sf::RectangleShape rectHead(sf::Vector2f(map->getTileSize().x * 0.6, map->getTileSize().y * 0.2));
-	rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x, map->getTileSize().y * getPos().y);
+		sf::RectangleShape rectHead(sf::Vector2f(map->getTileSize().x * 0.6, map->getTileSize().y * 0.2));
+		rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x, map->getTileSize().y * getPos().y);
 
-	sf::Transform transform;
-	transform.rotate(dir * 90, sf::Vector2f(map->getTileSize().x * getPos().x + map->getTileSize().x / 2, map->getTileSize().y * getPos().y + map->getTileSize().y / 2));
-	
-	rectHead.setFillColor(sf::Color::Yellow);
+		sf::Transform transform;
+		transform.rotate(dir * 90, sf::Vector2f(map->getTileSize().x * getPos().x + map->getTileSize().x / 2, map->getTileSize().y * getPos().y + map->getTileSize().y / 2));
 
-	window.draw(rectHead, transform);
+		rectHead.setFillColor(sf::Color::Yellow);
+
+		window.draw(rectHead, transform);
+	}
 }
 
 
@@ -47,9 +50,9 @@ void Invader::getNNInput(LightBulb::Vector<>& input) const
 	sf::Vector2i rotatedDirVector(-dirVector.y, dirVector.x);
 
 	int inputIndex = 0;
-	for (int i = 1; i >= -1; i--)
+	for (int i = 2; i >= -2; i--)
 	{
-		for (int j = 1; j >= -1; j--)
+		for (int j = 2; j >= -2; j--)
 		{
 			if (i != 0 || j != 0)
 				input.getEigenValueForEditing()[inputIndex++] = map->isTileWalkable(getPos() + i * dirVector + j * rotatedDirVector);
@@ -64,10 +67,13 @@ void Invader::getNNInput(LightBulb::Vector<>& input) const
 
 void Invader::isTerminalState(LightBulb::Scalar<char>& isTerminalState) const
 {
-	isTerminalState.getEigenValueForEditing() = false;
+	isTerminalState.getEigenValueForEditing() = map->getTime() == 20;
 }
 
 void Invader::getReward(LightBulb::Scalar<>& reward) const
 {
-	reward.getEigenValueForEditing() = lastPos.x - getPos().x;
+	if (dead)
+		reward.getEigenValueForEditing() = -2;
+	else
+		reward.getEigenValueForEditing() = lastPos.x - getPos().x;
 }

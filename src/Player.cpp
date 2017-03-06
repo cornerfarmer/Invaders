@@ -26,25 +26,22 @@ void Player::draw(sf::RenderWindow& window)
 	window.draw(rectHead, transform);
 }
 
-void Player::processEvent(const sf::Event& event)
+void Player::step()
 {
-	if (event.type == sf::Event::KeyPressed)
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
-		if (event.key.code == sf::Keyboard::Left)
-		{
-			walk(*map, LEFT);
-		}
-		if (event.key.code == sf::Keyboard::Right)
-		{
-			walk(*map, RIGHT);
-		}
-		if (event.key.code == sf::Keyboard::Up)
-		{
-			walk(*map, UP);
-		}
-		if (event.key.code == sf::Keyboard::Down)
-		{
-			walk(*map, DOWN);
-		}
+		walk(*map, LEFT);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
+	{
+		walk(*map, RIGHT);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
+	{
+		walk(*map, UP);
+	}
+	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
+	{
+		walk(*map, DOWN);
 	}
 }

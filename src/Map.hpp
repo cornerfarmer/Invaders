@@ -13,6 +13,7 @@ class Map : public LightBulb::AbstractReinforcementEnvironment
 {
 private:
 	std::vector<std::vector<std::unique_ptr<AbstractTile>>> tiles;
+	std::vector<AbstractGameObject*> gameObjects;
 	int width;
 	int height;
 	int time;
@@ -25,6 +26,9 @@ public:
 	void doSimulationStep() override;
 	void reset();
 	int getTime();
+	int getHeight();
+	int getWidth();
+	void addGameObject(AbstractGameObject* newGameObject);
 };
 
 #endif
