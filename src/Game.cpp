@@ -9,7 +9,7 @@
 
 
 Game::Game()
-	:player(&map, sf::Vector2i(10, 10))
+	:player(&map, sf::Vector2i(10, 10)), map(50, 10)
 {
 	map.addGameObject(&player);
 
@@ -44,12 +44,13 @@ Game::Game()
 void Game::reset()
 {
 	map.reset();
+	player.setPos(sf::Vector2i(5, map.getHeight() / 2), map);
 	for (int i = 0; i < invaders.size(); i++)
 	{
 		sf::Vector2i pos;
 
 		do {
-			pos = sf::Vector2i(15, rand() % map.getHeight());
+			pos = sf::Vector2i(map.getWidth() - 5, rand() % map.getHeight());
 		} while (!map.isTileWalkable(pos));
 		//pos = sf::Vector2i(15, 10);
 		invaders[i]->setPos(pos, map);
@@ -79,21 +80,23 @@ void Game::step()
 	player.step();
 
 	LightBulb::Scalar<> reward;
+	bool allDead = true;
 	for (int i = 0; i < invaders.size(); i++) 
 	{
 		if (!invaders[i]->isDead())
 		{
-			if (abs((invaders[i]->getPos() - player.getPos()).x) + abs((invaders[i]->getPos() - player.getPos()).y) <= 1)
+			if (abs((invaders[i]->getPos() - player.getPos()).x) + abs((invaders[i]->getPos() - player.getPos()).y) <= 1 || invaders[i]->getPos().x == 0)
 				invaders[i]->setDead(true);
 			invaders[i]->getReward(reward);
 			transitionStorage->storeTransition(*invaders[i], map, reward);
+			allDead = false;
 		}
 	}
 
-	if (map.getTime() >= 20)
+	if (allDead)
 	{
 		reset();
-		for (int r = 0; r < 100; r++) 
+		for (int r = 0; r < 10000; r++) 
 		{
 			for (int i = 0; i < invaders.size(); i++)
 				learningRules[i]->doSupervisedLearning();

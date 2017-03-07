@@ -25,6 +25,7 @@ protected:
 	AbstractGameObject(const sf::Vector2i& pos);
 	void walk(const Map& map, Direction dir, int distance = 1);
 public:
+	virtual ~AbstractGameObject() {};
 	void setDir(const Direction& dir);
 	void setDead(bool dead_);
 	bool isDead();

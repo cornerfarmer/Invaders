@@ -9,7 +9,7 @@ Invader::Invader(Map* map_, sf::Vector2i pos_, const LightBulb::FeedForwardNetwo
 	:AbstractGameObject(pos_), LightBulb::AbstractDefaultReinforcementIndividual(map, networkTopologyOptions, true)
 {
 	map = map_;
-	dir = RIGHT;
+	dir = LEFT;
 }
 
 void Invader::draw(sf::RenderWindow& window)
@@ -55,24 +55,24 @@ void Invader::getNNInput(LightBulb::Vector<>& input) const
 		for (int j = 2; j >= -2; j--)
 		{
 			if (i != 0 || j != 0)
-				input.getEigenValueForEditing()[inputIndex++] = map->isTileWalkable(getPos() + i * dirVector + j * rotatedDirVector);
+				input.getEigenValueForEditing()[inputIndex++] = map->getTileValue(getPos() + i * dirVector + j * rotatedDirVector);
 		}
 	}
 
 	input.getEigenValueForEditing()[inputIndex++] = dir == DOWN || dir == LEFT ? 1 : 0;
 	input.getEigenValueForEditing()[inputIndex++] = dir == RIGHT || dir == LEFT ? 1 : 0;
 
-	input.getEigenValueForEditing()[inputIndex++] = map->getTime() / 10.0;
+	input.getEigenValueForEditing()[inputIndex++] = map->getTime() / 20.0;
 }
 
 void Invader::isTerminalState(LightBulb::Scalar<char>& isTerminalState) const
 {
-	isTerminalState.getEigenValueForEditing() = map->getTime() == 20;
+	isTerminalState.getEigenValueForEditing() = map->getTime() == 20 || dead;
 }
 
 void Invader::getReward(LightBulb::Scalar<>& reward) const
 {
-	if (dead)
+	if (dead && getPos().x != 0)
 		reward.getEigenValueForEditing() = -2;
 	else
 		reward.getEigenValueForEditing() = lastPos.x - getPos().x;

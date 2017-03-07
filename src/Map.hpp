@@ -19,9 +19,10 @@ private:
 	int time;
 	sf::Vector2f tileSize;
 public:
-	Map();
+	Map(int width_, int height_);
 	void draw(sf::RenderWindow& window);
 	bool isTileWalkable(sf::Vector2i pos) const;
+	float getTileValue(sf::Vector2i pos) const;
 	const sf::Vector2f& getTileSize() const;
 	void doSimulationStep() override;
 	void reset();

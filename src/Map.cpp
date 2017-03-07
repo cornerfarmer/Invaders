@@ -2,11 +2,12 @@
 #include "Wall.hpp"
 #include "Floor.hpp"
 #include <SFML/Graphics/RenderWindow.hpp>
+#include "Invader.hpp"
 
-Map::Map()
+Map::Map(int width_, int height_)
 {
-	width = 20;
-	height = 20;
+	width = width_;
+	height = height_;
 
 	tiles.resize(width);
 
@@ -46,6 +47,28 @@ bool Map::isTileWalkable(sf::Vector2i pos) const
 			return false;
 	}
 	return tiles[pos.x][pos.y]->isWalkable();
+}
+
+float Map::getTileValue(sf::Vector2i pos) const
+{
+	if (isTileWalkable(pos))
+	{
+		return 1;
+	}
+	else
+	{
+		for (auto gameObject = gameObjects.begin(); gameObject != gameObjects.end(); gameObject++)
+		{
+			if ((*gameObject)->getPos() == pos && !(*gameObject)->isDead())
+			{
+				if (dynamic_cast<Player*>(*gameObject))
+					return 0;
+				else if (dynamic_cast<Invader*>(*gameObject))
+					return 1;
+			}
+		}
+		return 1;
+	}
 }
 
 const sf::Vector2f& Map::getTileSize() const
