@@ -39,7 +39,7 @@ int main2()
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1000, 200), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(1000, 400), "SFML works!");
 	Game game;
 	sf::Clock clock;
 

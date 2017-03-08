@@ -25,9 +25,9 @@ Map::Map(int width_, int height_)
 	}
 }
 
-void Map::draw(sf::RenderWindow& window)
+int Map::draw(sf::RenderWindow& window)
 {
-	tileSize = sf::Vector2f(window.getSize().x / width, window.getSize().y / height);
+	tileSize = sf::Vector2f(window.getSize().x / width, window.getSize().x / width);
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = 0; y < height; y++)
@@ -35,6 +35,7 @@ void Map::draw(sf::RenderWindow& window)
 			tiles[x][y]->draw(window, tileSize, sf::Vector2i(x, y));
 		}
 	}
+	return tileSize.y * height;
 }
 
 bool Map::isTileWalkable(sf::Vector2i pos) const

@@ -6,6 +6,7 @@
 #include <LightBulb/Function/ActivationFunction/IdentityFunction.hpp>
 #include <LightBulb/Function/InputFunction/WeightedSumFunction.hpp>
 #include <LightBulb/NeuronDescription/NeuronDescription.hpp>
+#include <SFML/Graphics/RenderWindow.hpp>
 
 
 Game::Game()
@@ -38,6 +39,9 @@ Game::Game()
 		map.addGameObject(invaders[i].get());
 	}
 
+	inspector.select(invaders[0].get());
+	invaders[0]->setMarked(true);
+
 	reset();
 }
 
@@ -61,10 +65,11 @@ void Game::reset()
 
 void Game::draw(sf::RenderWindow& window)
 {
-	map.draw(window);
+	int offsetY = map.draw(window);
 	player.draw(window);
 	for (int i = 0; i < invaders.size(); i++)
 		invaders[i]->draw(window);
+	inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetY));
 }
 
 void Game::step()
@@ -100,8 +105,10 @@ void Game::step()
 		{
 			for (int i = 0; i < invaders.size(); i++)
 				learningRules[i]->doSupervisedLearning();
+			if (r % 2000 == 0) {
+				for (int i = 0; i < invaders.size(); i++)
+					learningRules[i]->refreshSteadyNetwork();
+			}
 		}
-		for (int i = 0; i < invaders.size(); i++)
-			learningRules[i]->refreshSteadyNetwork();
 	}
 }

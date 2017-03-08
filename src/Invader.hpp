@@ -17,6 +17,7 @@ class Invader : public AbstractDrawable, public AbstractGameObject, public Light
 {
 	Map* map;
 	sf::Vector2i lastPos;
+	bool marked;
 protected:
 	void interpretNNOutput(LightBulb::Vector<char>& output) override;
 public:
@@ -25,6 +26,7 @@ public:
 	void getNNInput(LightBulb::Vector<>& input) const override;
 	void isTerminalState(LightBulb::Scalar<char>& isTerminalState) const override;
 	void getReward(LightBulb::Scalar<>& reward) const override;
+	void setMarked(bool marked_);
 };
 
 #endif

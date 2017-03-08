@@ -10,13 +10,14 @@ Invader::Invader(Map* map_, sf::Vector2i pos_, const LightBulb::FeedForwardNetwo
 {
 	map = map_;
 	dir = LEFT;
+	marked = false;
 }
 
 void Invader::draw(sf::RenderWindow& window)
 {
 	if (!dead) 
 	{
-		drawTile(window, *map, getPos(), sf::Color::Red);
+		drawTile(window, *map, getPos(), marked ? sf::Color::Blue : sf::Color::Red);
 
 		sf::RectangleShape rectHead(sf::Vector2f(map->getTileSize().x * 0.6, map->getTileSize().y * 0.2));
 		rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x, map->getTileSize().y * getPos().y);
@@ -55,14 +56,14 @@ void Invader::getNNInput(LightBulb::Vector<>& input) const
 		for (int j = 2; j >= -2; j--)
 		{
 			if (i != 0 || j != 0)
-				input.getEigenValueForEditing()[inputIndex++] = map->getTileValue(getPos() + i * dirVector + j * rotatedDirVector);
+				input.getEigenValueForEditing()[inputIndex++] = map->getTileValue(getPos() + i * dirVector + j * -rotatedDirVector);
 		}
 	}
 
 	input.getEigenValueForEditing()[inputIndex++] = dir == DOWN || dir == LEFT ? 1 : 0;
 	input.getEigenValueForEditing()[inputIndex++] = dir == RIGHT || dir == LEFT ? 1 : 0;
 
-	input.getEigenValueForEditing()[inputIndex++] = map->getTime() / 20.0;
+	input.getEigenValueForEditing()[inputIndex++] = map->getTime() / 50.0;
 }
 
 void Invader::isTerminalState(LightBulb::Scalar<char>& isTerminalState) const
@@ -76,4 +77,9 @@ void Invader::getReward(LightBulb::Scalar<>& reward) const
 		reward.getEigenValueForEditing() = -2;
 	else
 		reward.getEigenValueForEditing() = lastPos.x - getPos().x;
+}
+
+void Invader::setMarked(bool marked_)
+{
+	marked = marked_;
 }

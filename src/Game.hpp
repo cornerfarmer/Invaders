@@ -8,11 +8,13 @@
 #include "Map.hpp"
 #include "Invader.hpp"
 #include <LightBulb/Learning/Reinforcement/DQNLearningRule.hpp>
+#include "Inspector.hpp"
 
 class Game
 {
 private:
 	Map map;
+	Inspector inspector;
 	Player player;
 	std::vector<std::unique_ptr<Invader>> invaders;
 	std::vector<std::unique_ptr<LightBulb::DQNLearningRule>> learningRules;
