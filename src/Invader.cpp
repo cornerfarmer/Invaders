@@ -6,7 +6,7 @@
 #include <LightBulb/NetworkTopology/FeedForwardNetworkTopology.hpp>
 
 Invader::Invader(Map* map_, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions)
-	:AbstractGameObject(pos_), LightBulb::AbstractDefaultReinforcementIndividual(map, networkTopologyOptions, true)
+	:AbstractGameObject(pos_, 4), LightBulb::AbstractDefaultReinforcementIndividual(map, networkTopologyOptions, true)
 {
 	map = map_;
 	dir = LEFT;
@@ -82,4 +82,10 @@ void Invader::getReward(LightBulb::Scalar<>& reward) const
 void Invader::setMarked(bool marked_)
 {
 	marked = marked_;
+}
+
+bool Invader::doStep()
+{
+	doSimulationStep();
+	return true;
 }

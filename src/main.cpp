@@ -50,15 +50,13 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
-			if (event.type == sf::Event::KeyPressed)
-				game.step();
 		}
 
-	/*	if (clock.getElapsedTime().asMilliseconds() > 200)
+		if (clock.getElapsedTime().asMilliseconds() > 1000 / 20)
 		{
 			game.step();
 			clock.restart();
-		}*/
+		}
 
 		window.clear();
 		game.draw(window);

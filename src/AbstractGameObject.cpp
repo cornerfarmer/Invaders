@@ -1,10 +1,13 @@
 #include "AbstractGameObject.hpp"
 #include "Map.hpp"
 
-AbstractGameObject::AbstractGameObject(const sf::Vector2i& pos_)
+AbstractGameObject::AbstractGameObject(const sf::Vector2i& pos_, int speed_)
 {
 	pos = pos_;
 	dead = false;
+	speed = speed_;
+	ticksSinceLastStep = speed;
+	madeMove = false;
 }
 
 const sf::Vector2i AbstractGameObject::getPos() const
@@ -15,6 +18,24 @@ const sf::Vector2i AbstractGameObject::getPos() const
 sf::Vector2i AbstractGameObject::getDirVector() const
 {
 	return sf::Vector2i(dir == 1 ? 1 : (dir == 3 ? -1 : 0), dir == 2 ? 1 : (dir == 0 ? -1 : 0));
+}
+
+void AbstractGameObject::step()
+{
+	madeMove = false;
+	if (ticksSinceLastStep-- <= 0)
+	{
+		bool stepExecuted = doStep();
+		if (stepExecuted) {
+			ticksSinceLastStep = speed;
+			madeMove = true;
+		}
+	}
+}
+
+bool AbstractGameObject::madeMoveInLastStep()
+{
+	return madeMove;
 }
 
 void AbstractGameObject::setPos(const sf::Vector2i& newPos, const Map& map)

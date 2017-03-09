@@ -20,6 +20,7 @@ class Invader : public AbstractDrawable, public AbstractGameObject, public Light
 	bool marked;
 protected:
 	void interpretNNOutput(LightBulb::Vector<char>& output) override;
+	bool doStep() override;
 public:
 	Invader(Map* map, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions);
 	virtual void draw(sf::RenderWindow& window);

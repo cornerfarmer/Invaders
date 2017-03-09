@@ -19,11 +19,15 @@ class AbstractGameObject
 {
 private:
 	sf::Vector2i pos;
+	int ticksSinceLastStep;
+	int speed;
+	bool madeMove;
 protected:
 	Direction dir;
 	bool dead;
-	AbstractGameObject(const sf::Vector2i& pos);
+	AbstractGameObject(const sf::Vector2i& pos, int speed_);
 	void walk(const Map& map, Direction dir, int distance = 1);
+	virtual bool doStep() = 0;
 public:
 	virtual ~AbstractGameObject() {};
 	void setDir(const Direction& dir);
@@ -32,6 +36,8 @@ public:
 	void setPos(const sf::Vector2i& newPos, const Map& map);
 	const sf::Vector2i getPos() const;
 	sf::Vector2i getDirVector() const;
+	void step();
+	bool madeMoveInLastStep();
 };
 
 #endif 

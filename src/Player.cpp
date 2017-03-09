@@ -5,7 +5,7 @@
 #include "Map.hpp"
 
 Player::Player(Map* map_, sf::Vector2i pos_)
-	:AbstractGameObject(pos_)
+	:AbstractGameObject(pos_, 4)
 {
 	map = map_;
 	dir = RIGHT;
@@ -26,22 +26,27 @@ void Player::draw(sf::RenderWindow& window)
 	window.draw(rectHead, transform);
 }
 
-void Player::step()
+bool Player::doStep()
 {
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Left))
 	{
 		walk(*map, LEFT);
+		return true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Right))
 	{
 		walk(*map, RIGHT);
+		return true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Up))
 	{
 		walk(*map, UP);
+		return true;
 	}
 	if (sf::Keyboard::isKeyPressed(sf::Keyboard::Down))
 	{
 		walk(*map, DOWN);
+		return true;
 	}
+	return false;
 }

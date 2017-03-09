@@ -77,26 +77,35 @@ void Game::step()
 	for (int i = 0; i < invaders.size(); i++)
 	{
 		if (!invaders[i]->isDead())
-			invaders[i]->doSimulationStep();
+			invaders[i]->step();
 	}
 
 	map.doSimulationStep();
 
 	player.step();
 
-	LightBulb::Scalar<> reward;
 	bool allDead = true;
-	for (int i = 0; i < invaders.size(); i++) 
+	for (int i = 0; i < invaders.size(); i++)
 	{
 		if (!invaders[i]->isDead())
 		{
 			if (abs((invaders[i]->getPos() - player.getPos()).x) + abs((invaders[i]->getPos() - player.getPos()).y) <= 1 || invaders[i]->getPos().x == 0)
 				invaders[i]->setDead(true);
-			invaders[i]->getReward(reward);
-			transitionStorage->storeTransition(*invaders[i], map, reward);
-			allDead = false;
+			else
+				allDead = false;
 		}
 	}
+
+	LightBulb::Scalar<> reward;
+	for (int i = 0; i < invaders.size(); i++)
+	{
+		if (!invaders[i]->isDead() && invaders[i]->madeMoveInLastStep())
+		{
+			invaders[i]->getReward(reward);
+			transitionStorage->storeTransition(*invaders[i], map, reward);
+		}
+	}
+	
 
 	if (allDead)
 	{
@@ -105,10 +114,10 @@ void Game::step()
 		{
 			for (int i = 0; i < invaders.size(); i++)
 				learningRules[i]->doSupervisedLearning();
-			if (r % 2000 == 0) {
+			/*if (r % 2000 == 0) {
 				for (int i = 0; i < invaders.size(); i++)
 					learningRules[i]->refreshSteadyNetwork();
-			}
+			}*/
 		}
 	}
 }
