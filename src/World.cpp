@@ -88,10 +88,10 @@ float World::getTileValue(sf::Vector2i pos) const
 				if (dynamic_cast<Player*>(*gameObject))
 					return 0;
 				else if (dynamic_cast<Invader*>(*gameObject))
-					return 1;
+					return 0.3;
 			}
 		}
-		return 1;
+		return 0.6;
 	}
 }
 

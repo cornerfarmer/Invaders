@@ -64,7 +64,8 @@ void Invader::getNNInput(LightBulb::Vector<>& input) const
 	input.getEigenValueForEditing()[inputIndex++] = dir == DOWN || dir == LEFT ? 1 : 0;
 	input.getEigenValueForEditing()[inputIndex++] = dir == RIGHT || dir == LEFT ? 1 : 0;
 
-	input.getEigenValueForEditing()[inputIndex++] = world->getTime() / 50.0;
+	input.getEigenValueForEditing()[inputIndex++] = (float)getPos().x / world->getMap().getWidth();
+	input.getEigenValueForEditing()[inputIndex++] = (float)getPos().y / world->getMap().getHeight();
 }
 
 void Invader::isTerminalState(LightBulb::Scalar<char>& isTerminalState) const

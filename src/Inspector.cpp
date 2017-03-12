@@ -62,7 +62,8 @@ void Inspector::draw(sf::RenderWindow& window, sf::Vector2i offset)
 		netInput += renderFloat(input.getEigenValue()[inputIndex++]) + " ";
 		netInput += renderFloat(input.getEigenValue()[inputIndex++]) + "\n";
 
-		netInput += "Time:\n";
+		netInput += "Pos:\n";
+		netInput += renderFloat(input.getEigenValue()[inputIndex++]) + " ";
 		netInput += renderFloat(input.getEigenValue()[inputIndex++]) + "\n";
 
 		

@@ -19,8 +19,8 @@ LearningController::LearningController(World* world_)
 	options.finalExploration = 0.1;
 
 	LightBulb::FeedForwardNetworkTopologyOptions networkOptions;
-	networkOptions.neuronsPerLayerCount.push_back(27);
-	networkOptions.neuronsPerLayerCount.push_back(40);
+	networkOptions.neuronsPerLayerCount.push_back(28);
+	networkOptions.neuronsPerLayerCount.push_back(100);
 	networkOptions.neuronsPerLayerCount.push_back(4);
 
 	networkOptions.descriptionFactory = new LightBulb::DifferentNeuronDescriptionFactory(new LightBulb::NeuronDescription(new LightBulb::WeightedSumFunction(), new LightBulb::RectifierFunction()), new LightBulb::NeuronDescription(new LightBulb::WeightedSumFunction(), new LightBulb::IdentityFunction()));

@@ -30,7 +30,7 @@ void Game::draw(sf::RenderWindow& window)
 	int offsetY = state.draw(window);
 	int offsetYAfterMap = world.draw(window, offsetY);
 	learningController.draw(window, offsetY);
-	//inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetYAfterMap));
+	inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetYAfterMap));
 	toolbar.draw(window, sf::Vector2i(0, offsetYAfterMap));
 }
 
