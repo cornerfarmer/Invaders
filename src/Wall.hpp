@@ -9,7 +9,7 @@ class Wall : public AbstractTile
 {
 public:
 	Wall(const Map* map_);
-	void draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos) override;
+	void draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos, const sf::Vector2i& offset) override;
 	bool isWalkable() override;
 };
 

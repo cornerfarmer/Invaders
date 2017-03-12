@@ -25,17 +25,17 @@ Map::Map(int width_, int height_)
 	}
 }
 
-int Map::draw(sf::RenderWindow& window)
+int Map::draw(sf::RenderWindow& window, int offsetY)
 {
 	tileSize = sf::Vector2f(window.getSize().x / width, window.getSize().x / width);
 	for (int x = 0; x < width; x++)
 	{
 		for (int y = 0; y < height; y++)
 		{
-			tiles[x][y]->draw(window, tileSize, sf::Vector2i(x, y));
+			tiles[x][y]->draw(window, tileSize, sf::Vector2i(x, y), sf::Vector2i(0, offsetY));
 		}
 	}
-	return tileSize.y * height;
+	return tileSize.y * height + offsetY;
 }
 
 bool Map::isTileWalkable(sf::Vector2i pos) const

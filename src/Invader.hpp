@@ -23,7 +23,7 @@ protected:
 	bool doStep() override;
 public:
 	Invader(Map* map, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions);
-	virtual void draw(sf::RenderWindow& window);
+	virtual void draw(sf::RenderWindow& window, sf::Vector2i offset);
 	void getNNInput(LightBulb::Vector<>& input) const override;
 	void isTerminalState(LightBulb::Scalar<char>& isTerminalState) const override;
 	void getReward(LightBulb::Scalar<>& reward) const override;

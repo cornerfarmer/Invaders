@@ -39,7 +39,7 @@ int main2()
 
 int main()
 {
-	sf::RenderWindow window(sf::VideoMode(1000, 400), "SFML works!");
+	sf::RenderWindow window(sf::VideoMode(1000, 450), "SFML works!");
 	Game game;
 	sf::Clock clock;
 
@@ -50,9 +50,11 @@ int main()
 		{
 			if (event.type == sf::Event::Closed)
 				window.close();
+			else if (event.type == sf::Event::MouseButtonPressed)
+				game.click(event.mouseButton);
 		}
 
-		if (clock.getElapsedTime().asMilliseconds() > 1000 / 20)
+		if (clock.getElapsedTime().asMilliseconds() > 1000 / 30)
 		{
 			game.step();
 			clock.restart();

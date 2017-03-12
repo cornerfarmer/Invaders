@@ -11,15 +11,15 @@ Player::Player(Map* map_, sf::Vector2i pos_)
 	dir = RIGHT;
 }
 
-void Player::draw(sf::RenderWindow& window)
+void Player::draw(sf::RenderWindow& window, sf::Vector2i offset)
 {
-	drawTile(window, *map, getPos(), sf::Color::Red);
+	drawTile(window, *map, getPos(), sf::Color::Red, offset);
 
 	sf::RectangleShape rectHead(sf::Vector2f(map->getTileSize().x * 0.6, map->getTileSize().y * 0.2));
-	rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x, map->getTileSize().y * getPos().y);
+	rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x + offset.x, map->getTileSize().y * getPos().y + offset.y);
 
 	sf::Transform transform;
-	transform.rotate(dir * 90, sf::Vector2f(map->getTileSize().x * getPos().x + map->getTileSize().x / 2, map->getTileSize().y * getPos().y + map->getTileSize().y / 2));
+	transform.rotate(dir * 90, sf::Vector2f(map->getTileSize().x * getPos().x + map->getTileSize().x / 2 + offset.x, map->getTileSize().y * getPos().y + map->getTileSize().y / 2 + offset.y));
 	
 	rectHead.setFillColor(sf::Color::Yellow);
 

@@ -16,7 +16,6 @@ std::string Inspector::renderFloat(float number)
 Inspector::Inspector()
 {
 	selected = nullptr;
-	font.loadFromFile("segoeui.ttf");
 }
 
 void Inspector::select(Invader* invader)

@@ -10,7 +10,7 @@
 
 
 Game::Game()
-	:player(&map, sf::Vector2i(10, 10)), map(50, 10)
+	:player(&map, sf::Vector2i(10, 10)), map(50, 10), toolbar(this)
 {
 	map.addGameObject(&player);
 
@@ -63,61 +63,109 @@ void Game::reset()
 	}
 }
 
+void Game::newGame()
+{
+	reset();
+	for (int i = 0; i < invaders.size(); i++)
+		learningRules[i]->initializeTry();
+	state.reset();
+}
+
 void Game::draw(sf::RenderWindow& window)
 {
-	int offsetY = map.draw(window);
-	player.draw(window);
+	int offsetY = state.draw(window);
+	int offsetYAfterMap = map.draw(window, offsetY);
+	player.draw(window, sf::Vector2i(0, offsetY));
 	for (int i = 0; i < invaders.size(); i++)
-		invaders[i]->draw(window);
-	inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetY));
+		invaders[i]->draw(window, sf::Vector2i(0, offsetY));
+	inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetYAfterMap));
+	toolbar.draw(window, sf::Vector2i(0, offsetYAfterMap));
+}
+
+
+void Game::click(sf::Event::MouseButtonEvent event)
+{
+	toolbar.click(event);
 }
 
 void Game::step()
 {
-	for (int i = 0; i < invaders.size(); i++)
+	if (state.getMode() == PLAY || state.getMode() == ONESTEP)
 	{
-		if (!invaders[i]->isDead())
-			invaders[i]->step();
-	}
-
-	map.doSimulationStep();
-
-	player.step();
-
-	bool allDead = true;
-	for (int i = 0; i < invaders.size(); i++)
-	{
-		if (!invaders[i]->isDead())
+		for (int i = 0; i < invaders.size(); i++)
 		{
-			if (abs((invaders[i]->getPos() - player.getPos()).x) + abs((invaders[i]->getPos() - player.getPos()).y) <= 1 || invaders[i]->getPos().x == 0)
-				invaders[i]->setDead(true);
-			else
-				allDead = false;
+			if (!invaders[i]->isDead())
+				invaders[i]->step();
 		}
-	}
 
-	LightBulb::Scalar<> reward;
-	for (int i = 0; i < invaders.size(); i++)
-	{
-		if (!invaders[i]->isDead() && invaders[i]->madeMoveInLastStep())
+		map.doSimulationStep();
+
+		player.step();
+
+		bool allDead = true;
+		for (int i = 0; i < invaders.size(); i++)
 		{
-			invaders[i]->getReward(reward);
-			transitionStorage->storeTransition(*invaders[i], map, reward);
+			if (!invaders[i]->isDead())
+			{
+				if (abs((invaders[i]->getPos() - player.getPos()).x) + abs((invaders[i]->getPos() - player.getPos()).y) <= 1)
+					invaders[i]->setDead(true);
+				else if (invaders[i]->getPos().x == 0)
+				{
+					invaders[i]->setDead(true);
+					if (state.substractALive())
+					{
+						newGame();
+						return;
+					}
+				}
+				else
+					allDead = false;
+			}
 		}
-	}
-	
 
-	if (allDead)
-	{
-		reset();
-		for (int r = 0; r < 10000; r++) 
+		LightBulb::Scalar<> reward;
+		for (int i = 0; i < invaders.size(); i++)
 		{
-			for (int i = 0; i < invaders.size(); i++)
-				learningRules[i]->doSupervisedLearning();
-			/*if (r % 2000 == 0) {
+			if (!invaders[i]->isDead() && invaders[i]->madeMoveInLastStep())
+			{
+				invaders[i]->getReward(reward);
+				transitionStorage->storeTransition(*invaders[i], map, reward);
+			}
+		}
+
+
+		if (allDead)
+		{
+			reset();
+			for (int r = 0; r < 10000; r++)
+			{
 				for (int i = 0; i < invaders.size(); i++)
-					learningRules[i]->refreshSteadyNetwork();
-			}*/
+					learningRules[i]->doSupervisedLearning();
+				if (r % 2000 == 0) {
+					for (int i = 0; i < invaders.size(); i++)
+						learningRules[i]->refreshSteadyNetwork();
+				}
+			}
+			state.nextRound();
 		}
+
+		if (state.getMode() == ONESTEP)
+			state.setMode(PAUSE);
 	}
+}
+
+
+void Game::play()
+{
+	state.setMode(PLAY);
+}
+
+void Game::pause()
+{
+	state.setMode(PAUSE);
+}
+
+void Game::nextStep()
+{
+	state.setMode(ONESTEP);
 }

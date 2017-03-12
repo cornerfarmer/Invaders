@@ -20,7 +20,7 @@ private:
 	sf::Vector2f tileSize;
 public:
 	Map(int width_, int height_);
-	int draw(sf::RenderWindow& window);
+	int draw(sf::RenderWindow& window, int offsetY);
 	bool isTileWalkable(sf::Vector2i pos) const;
 	float getTileValue(sf::Vector2i pos) const;
 	const sf::Vector2f& getTileSize() const;

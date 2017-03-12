@@ -21,7 +21,7 @@ protected:
 	bool doStep();
 public:
 	Player(Map* map, sf::Vector2i pos_);
-	virtual void draw(sf::RenderWindow& window);
+	virtual void draw(sf::RenderWindow& window, sf::Vector2i offset);
 };
 
 #endif

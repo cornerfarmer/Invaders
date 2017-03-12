@@ -8,9 +8,9 @@ Wall::Wall(const Map* map_)
 
 }
 
-void Wall::draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos)
+void Wall::draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos, const sf::Vector2i& offset)
 {
-	drawTile(window, *map, pos, sf::Color::White);
+	drawTile(window, *map, pos, sf::Color::White, offset);
 }
 
 bool Wall::isWalkable()

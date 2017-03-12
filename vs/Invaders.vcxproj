@@ -28,6 +28,8 @@
     <ClInclude Include="..\src\Invader.hpp" />
     <ClInclude Include="..\src\Map.hpp" />
     <ClInclude Include="..\src\Player.hpp" />
+    <ClInclude Include="..\src\State.hpp" />
+    <ClInclude Include="..\src\Toolbar.hpp" />
     <ClInclude Include="..\src\Wall.hpp" />
   </ItemGroup>
   <ItemGroup>
@@ -41,6 +43,8 @@
     <ClCompile Include="..\src\main.cpp" />
     <ClCompile Include="..\src\Map.cpp" />
     <ClCompile Include="..\src\Player.cpp" />
+    <ClCompile Include="..\src\State.cpp" />
+    <ClCompile Include="..\src\Toolbar.cpp" />
     <ClCompile Include="..\src\Wall.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

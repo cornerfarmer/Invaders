@@ -2,8 +2,10 @@
 
 #ifndef _INSPECTOR_HPP_
 #define _INSPECTOR_HPP_
+
 #include <SFML/System/Vector2.hpp>
 #include <SFML/Graphics/Font.hpp>
+#include "AbstractDrawable.hpp"
 
 namespace sf {
 	class RenderWindow;
@@ -11,11 +13,10 @@ namespace sf {
 
 class Invader;
 
-class Inspector
+class Inspector : public virtual AbstractDrawable
 {
 private:
 	Invader* selected;
-	sf::Font font;
 	std::string renderFloat(float number);
 public:
 	Inspector();

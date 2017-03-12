@@ -17,7 +17,7 @@ protected:
 public:
 	virtual ~AbstractTile() = default;
 	AbstractTile(const Map* map_);
-	virtual void draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos) = 0;
+	virtual void draw(sf::RenderWindow& window, const sf::Vector2f& tileSize, const sf::Vector2i& pos, const sf::Vector2i& offset) = 0;
 	virtual bool isWalkable() = 0;
 };
 
