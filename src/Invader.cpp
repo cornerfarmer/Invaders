@@ -4,11 +4,12 @@
 #include <SFML/Graphics/RenderWindow.hpp>
 #include "Map.hpp" 
 #include <LightBulb/NetworkTopology/FeedForwardNetworkTopology.hpp>
+#include "World.hpp"
 
-Invader::Invader(Map* map_, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions)
-	:AbstractGameObject(pos_, 4), LightBulb::AbstractDefaultReinforcementIndividual(map, networkTopologyOptions, true)
+Invader::Invader(World* world_, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions)
+	:AbstractGameObject(pos_, 4), LightBulb::AbstractDefaultReinforcementIndividual(world_, networkTopologyOptions, true)
 {
-	map = map_;
+	world = world_;
 	dir = LEFT;
 	marked = false;
 }
@@ -17,13 +18,13 @@ void Invader::draw(sf::RenderWindow& window, sf::Vector2i offset)
 {
 	if (!dead) 
 	{
-		drawTile(window, *map, getPos(), marked ? sf::Color::Blue : sf::Color::Red, offset);
+		drawTile(window, world->getMap(), getPos(), marked ? sf::Color::Blue : sf::Color::Red, offset);
 
-		sf::RectangleShape rectHead(sf::Vector2f(map->getTileSize().x * 0.6, map->getTileSize().y * 0.2));
-		rectHead.setPosition(map->getTileSize().x * getPos().x + 0.2 * map->getTileSize().x + offset.x, map->getTileSize().y * getPos().y + offset.y);
+		sf::RectangleShape rectHead(sf::Vector2f(world->getMap().getTileSize().x * 0.6, world->getMap().getTileSize().y * 0.2));
+		rectHead.setPosition(world->getMap().getTileSize().x * getPos().x + 0.2 * world->getMap().getTileSize().x + offset.x, world->getMap().getTileSize().y * getPos().y + offset.y);
 
 		sf::Transform transform;
-		transform.rotate(dir * 90, sf::Vector2f(map->getTileSize().x * getPos().x + map->getTileSize().x / 2 + offset.x, map->getTileSize().y * getPos().y + map->getTileSize().y / 2 + offset.y));
+		transform.rotate(dir * 90, sf::Vector2f(world->getMap().getTileSize().x * getPos().x + world->getMap().getTileSize().x / 2 + offset.x, world->getMap().getTileSize().y * getPos().y + world->getMap().getTileSize().y / 2 + offset.y));
 
 		rectHead.setFillColor(sf::Color::Yellow);
 
@@ -36,13 +37,13 @@ void Invader::interpretNNOutput(LightBulb::Vector<char>& output)
 {
 	lastPos = getPos();
 	if (output.getEigenValue()[0])
-		walk(*map, dir);
+		walk(*world, dir);
 	else if (output.getEigenValue()[1])
-		walk(*map, static_cast<Direction>((dir + 1) % 4));
+		walk(*world, static_cast<Direction>((dir + 1) % 4));
 	else if (output.getEigenValue()[2])
-		walk(*map, static_cast<Direction>((dir + 2) % 4));
+		walk(*world, static_cast<Direction>((dir + 2) % 4));
 	else if(output.getEigenValue()[3])
-		walk(*map, static_cast<Direction>((dir + 3) % 4));
+		walk(*world, static_cast<Direction>((dir + 3) % 4));
 }
 
 void Invader::getNNInput(LightBulb::Vector<>& input) const
@@ -56,19 +57,19 @@ void Invader::getNNInput(LightBulb::Vector<>& input) const
 		for (int j = 2; j >= -2; j--)
 		{
 			if (i != 0 || j != 0)
-				input.getEigenValueForEditing()[inputIndex++] = map->getTileValue(getPos() + i * dirVector + j * -rotatedDirVector);
+				input.getEigenValueForEditing()[inputIndex++] = world->getTileValue(getPos() + i * dirVector + j * -rotatedDirVector);
 		}
 	}
 
 	input.getEigenValueForEditing()[inputIndex++] = dir == DOWN || dir == LEFT ? 1 : 0;
 	input.getEigenValueForEditing()[inputIndex++] = dir == RIGHT || dir == LEFT ? 1 : 0;
 
-	input.getEigenValueForEditing()[inputIndex++] = map->getTime() / 50.0;
+	input.getEigenValueForEditing()[inputIndex++] = world->getTime() / 50.0;
 }
 
 void Invader::isTerminalState(LightBulb::Scalar<char>& isTerminalState) const
 {
-	isTerminalState.getEigenValueForEditing() = map->getTime() == 20 || dead;
+	isTerminalState.getEigenValueForEditing() = world->getTime() == 20 || dead;
 }
 
 void Invader::getReward(LightBulb::Scalar<>& reward) const

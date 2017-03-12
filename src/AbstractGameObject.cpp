@@ -1,5 +1,6 @@
 #include "AbstractGameObject.hpp"
 #include "Map.hpp"
+#include "World.hpp"
 
 AbstractGameObject::AbstractGameObject(const sf::Vector2i& pos_, int speed_)
 {
@@ -38,13 +39,13 @@ bool AbstractGameObject::madeMoveInLastStep()
 	return madeMove;
 }
 
-void AbstractGameObject::setPos(const sf::Vector2i& newPos, const Map& map)
+void AbstractGameObject::setPos(const sf::Vector2i& newPos, const World& world)
 {
-	if (newPos != pos && map.isTileWalkable(newPos))
+	if (newPos != pos && world.isTileWalkable(newPos))
 		pos = newPos;
 }
 
-void AbstractGameObject::walk(const Map& map, Direction newDir, int distance)
+void AbstractGameObject::walk(const World& world, Direction newDir, int distance)
 {
 	sf::Vector2i nextPos = getPos();
 	if (newDir == LEFT)
@@ -64,7 +65,7 @@ void AbstractGameObject::walk(const Map& map, Direction newDir, int distance)
 		nextPos.y += distance;
 	}
 	dir = newDir;
-	setPos(nextPos, map);
+	setPos(nextPos, world);
 }
 
 void AbstractGameObject::setDir(const Direction& dir_)

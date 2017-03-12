@@ -11,18 +11,18 @@ namespace sf {
 	class RenderWindow;
 }
 
-class Map;
+class World;
 
 class Invader : public AbstractDrawable, public AbstractGameObject, public LightBulb::AbstractDefaultReinforcementIndividual
 {
-	Map* map;
+	World* world;
 	sf::Vector2i lastPos;
 	bool marked;
 protected:
 	void interpretNNOutput(LightBulb::Vector<char>& output) override;
 	bool doStep() override;
 public:
-	Invader(Map* map, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions);
+	Invader(World* world, sf::Vector2i pos_, const LightBulb::FeedForwardNetworkTopologyOptions& networkTopologyOptions);
 	virtual void draw(sf::RenderWindow& window, sf::Vector2i offset);
 	void getNNInput(LightBulb::Vector<>& input) const override;
 	void isTerminalState(LightBulb::Scalar<char>& isTerminalState) const override;

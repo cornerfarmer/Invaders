@@ -12,15 +12,15 @@ namespace sf {
 	class RenderWindow;
 }
 
-class Map;
+class World;
 
 class Player : public AbstractDrawable, public AbstractGameObject
 {
-	Map* map;
+	World* world;
 protected:
 	bool doStep();
 public:
-	Player(Map* map, sf::Vector2i pos_);
+	Player(World* world, sf::Vector2i pos_);
 	virtual void draw(sf::RenderWindow& window, sf::Vector2i offset);
 };
 

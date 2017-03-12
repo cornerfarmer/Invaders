@@ -3,26 +3,23 @@
 #ifndef _GAME_HPP_
 #define _GAME_HPP_
 
-#include "Player.hpp"
 #include <SFML/Window/Event.hpp>
-#include "Map.hpp"
 #include "Invader.hpp"
 #include <LightBulb/Learning/Reinforcement/DQNLearningRule.hpp>
 #include "Inspector.hpp"
 #include "Toolbar.hpp"
 #include "State.hpp"
+#include "World.hpp"
+#include "LearningController.hpp"
 
 class Game
 {
 private:
 	State state;
-	Map map;
+	World world;
 	Inspector inspector;
-	Player player;
 	Toolbar toolbar;
-	std::vector<std::unique_ptr<Invader>> invaders;
-	std::vector<std::unique_ptr<LightBulb::DQNLearningRule>> learningRules;
-	std::shared_ptr<LightBulb::TransitionStorage> transitionStorage;
+	LearningController learningController;
 	void reset();
 	void newGame();
 public:

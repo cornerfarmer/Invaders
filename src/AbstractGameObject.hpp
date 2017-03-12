@@ -5,7 +5,7 @@
 
 #include <SFML/System/Vector2.hpp>
 
-class Map;
+class World;
 
 enum Direction
 {
@@ -26,14 +26,14 @@ protected:
 	Direction dir;
 	bool dead;
 	AbstractGameObject(const sf::Vector2i& pos, int speed_);
-	void walk(const Map& map, Direction dir, int distance = 1);
+	void walk(const World& world, Direction dir, int distance = 1);
 	virtual bool doStep() = 0;
 public:
 	virtual ~AbstractGameObject() {};
 	void setDir(const Direction& dir);
 	void setDead(bool dead_);
 	bool isDead();
-	void setPos(const sf::Vector2i& newPos, const Map& map);
+	void setPos(const sf::Vector2i& newPos, const World& world);
 	const sf::Vector2i getPos() const;
 	sf::Vector2i getDirVector() const;
 	void step();

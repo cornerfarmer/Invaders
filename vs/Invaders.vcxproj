@@ -24,6 +24,7 @@
     <ClInclude Include="..\src\AbstractTile.hpp" />
     <ClInclude Include="..\src\Floor.hpp" />
     <ClInclude Include="..\src\Game.hpp" />
+    <ClInclude Include="..\src\LearningController.hpp" />
     <ClInclude Include="..\src\Inspector.hpp" />
     <ClInclude Include="..\src\Invader.hpp" />
     <ClInclude Include="..\src\Map.hpp" />
@@ -31,6 +32,7 @@
     <ClInclude Include="..\src\State.hpp" />
     <ClInclude Include="..\src\Toolbar.hpp" />
     <ClInclude Include="..\src\Wall.hpp" />
+    <ClInclude Include="..\src\World.hpp" />
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\src\AbstractDrawable.cpp" />
@@ -38,6 +40,7 @@
     <ClCompile Include="..\src\AbstractTile.cpp" />
     <ClCompile Include="..\src\Floor.cpp" />
     <ClCompile Include="..\src\Game.cpp" />
+    <ClCompile Include="..\src\LearningController.cpp" />
     <ClCompile Include="..\src\Inspector.cpp" />
     <ClCompile Include="..\src\Invader.cpp" />
     <ClCompile Include="..\src\main.cpp" />
@@ -46,6 +49,7 @@
     <ClCompile Include="..\src\State.cpp" />
     <ClCompile Include="..\src\Toolbar.cpp" />
     <ClCompile Include="..\src\Wall.cpp" />
+    <ClCompile Include="..\src\World.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{20D8A820-1C5D-47E7-9A5D-D96E1080C8A9}</ProjectGuid>
