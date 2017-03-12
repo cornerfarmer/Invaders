@@ -72,12 +72,12 @@ void LearningController::draw(sf::RenderWindow& window, int offsetY)
 }
 
 
-void LearningController::storeTransitions()
+void LearningController::storeTransitions(bool force)
 {
 	LightBulb::Scalar<> reward;
 	for (int i = 0; i < invaders.size(); i++)
 	{
-		if (!invaders[i]->isDead() && invaders[i]->madeMoveInLastStep())
+		if (force || invaders[i]->makesMoveInNextStep())
 		{
 			invaders[i]->getReward(reward);
 			transitionStorage->storeTransition(*invaders[i], *world, reward);
@@ -107,8 +107,7 @@ void LearningController::step()
 {
 	for (int i = 0; i < invaders.size(); i++)
 	{
-		if (!invaders[i]->isDead())
-			invaders[i]->step();
+		invaders[i]->step();
 	}
 }
 

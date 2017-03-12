@@ -38,6 +38,7 @@ public:
 	sf::Vector2i getDirVector() const;
 	void step();
 	bool madeMoveInLastStep();
+	bool makesMoveInNextStep();
 };
 
 #endif 

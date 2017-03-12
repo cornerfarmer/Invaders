@@ -24,7 +24,7 @@ public:
 	void draw(sf::RenderWindow& window, int offsetY);
 	void reset();
 	void newGame();
-	void storeTransitions();
+	void storeTransitions(bool force = false);
 	void doLearning();
 	std::vector<std::unique_ptr<Invader>>& getInvaders();
 };

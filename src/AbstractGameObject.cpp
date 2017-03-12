@@ -7,7 +7,7 @@ AbstractGameObject::AbstractGameObject(const sf::Vector2i& pos_, int speed_)
 	pos = pos_;
 	dead = false;
 	speed = speed_;
-	ticksSinceLastStep = speed;
+	ticksSinceLastStep = 0;
 	madeMove = false;
 }
 
@@ -24,7 +24,7 @@ sf::Vector2i AbstractGameObject::getDirVector() const
 void AbstractGameObject::step()
 {
 	madeMove = false;
-	if (ticksSinceLastStep-- <= 0)
+	if (!isDead() && ticksSinceLastStep-- <= 0)
 	{
 		bool stepExecuted = doStep();
 		if (stepExecuted) {
@@ -37,6 +37,11 @@ void AbstractGameObject::step()
 bool AbstractGameObject::madeMoveInLastStep()
 {
 	return madeMove;
+}
+
+bool AbstractGameObject::makesMoveInNextStep()
+{
+	return !isDead() && ticksSinceLastStep - 1 <= 0;
 }
 
 void AbstractGameObject::setPos(const sf::Vector2i& newPos, const World& world)

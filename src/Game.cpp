@@ -30,7 +30,7 @@ void Game::draw(sf::RenderWindow& window)
 	int offsetY = state.draw(window);
 	int offsetYAfterMap = world.draw(window, offsetY);
 	learningController.draw(window, offsetY);
-	inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetYAfterMap));
+	//inspector.draw(window, sf::Vector2i(window.getSize().x / 2, offsetYAfterMap));
 	toolbar.draw(window, sf::Vector2i(0, offsetYAfterMap));
 }
 
@@ -44,20 +44,23 @@ void Game::step()
 {
 	if (state.getMode() == PLAY || state.getMode() == ONESTEP)
 	{
-		learningController.step();
-
-		world.doSimulationStep();
-		
-		world.checkIndividualPositions(state);
-
-		learningController.storeTransitions();
+		if (world.getTime() != 0)
+			learningController.storeTransitions(learningController.hasRoundEnded());
 
 		if (learningController.hasRoundEnded())
 		{
 			reset();
 			learningController.doLearning();
 			state.nextRound();
+			return;
 		}
+
+		learningController.step();
+
+		world.doSimulationStep();
+		
+		if (world.checkIndividualPositions(state))	
+			newGame();
 
 		if (state.getMode() == ONESTEP)
 			state.setMode(PAUSE);
