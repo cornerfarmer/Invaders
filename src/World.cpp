@@ -75,7 +75,7 @@ bool World::isTileWalkable(sf::Vector2i pos) const
 
 float World::getTileValue(sf::Vector2i pos) const
 {
-	if (isTileWalkable(pos))
+	if (isTileWalkable(pos) || pos.x < 0)
 	{
 		return 1;
 	}

@@ -7,6 +7,7 @@
 #include <LightBulb/Function/InputFunction/WeightedSumFunction.hpp>
 #include <LightBulb/NeuronDescription/NeuronDescription.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
+#include <LightBulb/NeuralNetwork/NeuralNetwork.hpp>
 
 
 LearningController::LearningController(World* world_)
@@ -20,7 +21,8 @@ LearningController::LearningController(World* world_)
 
 	LightBulb::FeedForwardNetworkTopologyOptions networkOptions;
 	networkOptions.neuronsPerLayerCount.push_back(28);
-	networkOptions.neuronsPerLayerCount.push_back(100);
+	networkOptions.neuronsPerLayerCount.push_back(50);
+	networkOptions.neuronsPerLayerCount.push_back(50);
 	networkOptions.neuronsPerLayerCount.push_back(4);
 
 	networkOptions.descriptionFactory = new LightBulb::DifferentNeuronDescriptionFactory(new LightBulb::NeuronDescription(new LightBulb::WeightedSumFunction(), new LightBulb::RectifierFunction()), new LightBulb::NeuronDescription(new LightBulb::WeightedSumFunction(), new LightBulb::IdentityFunction()));
@@ -89,13 +91,14 @@ void LearningController::doLearning()
 {
 	for (int r = 0; r < 10000; r++)
 	{
-		for (int i = 0; i < invaders.size(); i++)
-			learningRules[i]->doSupervisedLearning();
+		learningRules[0]->doSupervisedLearning();
 		if (r % 2000 == 0) {
-			for (int i = 0; i < invaders.size(); i++)
-				learningRules[i]->refreshSteadyNetwork();
+			learningRules[0]->refreshSteadyNetwork();
 		}
 	}
+
+	for (int i = 1; i < invaders.size(); i++)
+		invaders[i]->getNeuralNetwork().getNetworkTopology().copyWeightsFrom(invaders[0]->getNeuralNetwork().getNetworkTopology());
 }
 
 std::vector<std::unique_ptr<Invader>>& LearningController::getInvaders()
