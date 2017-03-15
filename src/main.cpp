@@ -37,7 +37,7 @@ int main2()
 }
 
 
-int main()
+int main3()
 {
 	sf::RenderWindow window(sf::VideoMode(1000, 450), "SFML works!");
 	Game game;
@@ -64,6 +64,21 @@ int main()
 		game.draw(window);
 		window.display();
 	}
+
+	return 0;
+}
+
+#include "LightBulbApp/App.hpp"
+
+int main(int argc, char** argv)
+{
+	std::cout << viennacl::ocl::current_device().name() << std::endl;
+
+	LightBulb::App* app = new LightBulb::App();
+	app->addTrainingPlan(new Game());
+
+	wxApp::SetInstance(app);
+	wxEntry(argc, argv);
 
 	return 0;
 }

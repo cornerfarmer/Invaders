@@ -13,7 +13,7 @@ class LearningController
 {
 private:
 	std::vector<std::unique_ptr<Invader>> invaders;
-	std::vector<std::unique_ptr<LightBulb::DQNLearningRule>> learningRules;
+	LightBulb::DQNLearningRule* learningRule;
 	std::shared_ptr<LightBulb::TransitionStorage> transitionStorage;
 	World* world;
 public:
@@ -27,6 +27,7 @@ public:
 	void storeTransitions(bool force = false);
 	void doLearning();
 	std::vector<std::unique_ptr<Invader>>& getInvaders();
+	LightBulb::DQNLearningRule* createLearningRule();
 };
 
 #endif

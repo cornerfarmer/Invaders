@@ -13,11 +13,8 @@
 LearningController::LearningController(World* world_)
 {
 	world = world_;
+	learningRule = nullptr;
 
-	LightBulb::DQNLearningRuleOptions options;
-	options.environment = world;
-	options.initialExploration = 0.1;
-	options.finalExploration = 0.1;
 
 	LightBulb::FeedForwardNetworkTopologyOptions networkOptions;
 	networkOptions.neuronsPerLayerCount.push_back(28);
@@ -32,17 +29,32 @@ LearningController::LearningController(World* world_)
 	for (int i = 0; i < 5; i++)
 	{
 		invaders.push_back(std::unique_ptr<Invader>(new Invader(world, sf::Vector2i(0, 0), networkOptions)));
-		options.individual = invaders.back().get();
-
-		learningRules.push_back(std::unique_ptr<LightBulb::DQNLearningRule>(new LightBulb::DQNLearningRule(options)));
-		learningRules.back()->setTransitionStorage(transitionStorage);
-		learningRules.back()->initializeTry();
+	
 		world->addGameObject(invaders[i].get());
 	}
 
 	invaders[0]->setMarked(true);
 
 	reset();
+}
+
+
+LightBulb::DQNLearningRule* LearningController::createLearningRule()
+{
+	LightBulb::DQNLearningRuleOptions options;
+	options.environment = world;
+	options.initialExploration = 0.1;
+	options.finalExploration = 0.1;
+	options.individual = invaders.front().get();
+
+	learningRule = new LightBulb::DQNLearningRule(options);
+	learningRule->setTransitionStorage(transitionStorage);
+	learningRule->initializeTry();
+
+	for (int i = 1; i < invaders.size(); i++)
+		invaders[i]->setRandomGenerator(invaders[0]->getRandomGenerator());
+
+	return learningRule;
 }
 
 void LearningController::reset()
@@ -63,8 +75,8 @@ void LearningController::reset()
 
 void LearningController::newGame()
 {
-	for (int i = 0; i < invaders.size(); i++)
-		learningRules[i]->initializeTry();
+	/*for (int i = 0; i < invaders.size(); i++)
+		learningRules[i]->initializeTry();*/
 }
 
 void LearningController::draw(sf::RenderWindow& window, int offsetY)
@@ -91,9 +103,9 @@ void LearningController::doLearning()
 {
 	for (int r = 0; r < 10000; r++)
 	{
-		learningRules[0]->doSupervisedLearning();
+		learningRule->doSupervisedLearning();
 		if (r % 2000 == 0) {
-			learningRules[0]->refreshSteadyNetwork();
+			learningRule->refreshSteadyNetwork();
 		}
 	}
 

@@ -11,8 +11,9 @@
 #include "State.hpp"
 #include "World.hpp"
 #include "LearningController.hpp"
+#include "LightBulbApp/TrainingPlans/AbstractLearningRuleTrainingPlan.hpp"
 
-class Game
+class Game : public LightBulb::AbstractLearningRuleTrainingPlan
 {
 private:
 	State state;
@@ -24,12 +25,22 @@ private:
 	void newGame();
 public:
 	Game();
+	~Game();
 	void draw(sf::RenderWindow& window);
 	void step();
 	void click(sf::Event::MouseButtonEvent event);
 	void play();
 	void pause();
 	void nextStep();
+	void run(bool initial);
+protected:
+	AbstractTrainingPlan* createNewFromSameType() const override;
+public:
+	std::string getOriginalName() const override;
+	std::string getDescription() const override;
+	std::string getLearningRuleName() const override;
+protected:
+	LightBulb::AbstractLearningRule* createLearningRate() override;
 };
 
 #endif

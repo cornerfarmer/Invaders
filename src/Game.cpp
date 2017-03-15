@@ -1,7 +1,8 @@
 #include "Game.hpp"
 #include <LightBulb/NetworkTopology/FeedForwardNetworkTopology.hpp>
 #include <SFML/Graphics/RenderWindow.hpp>
-
+#include <LightBulb/Learning/AbstractLearningResult.hpp>
+#include <LightBulb/Learning/LearningState.hpp>
 
 Game::Game()
 	: toolbar(this), learningController(&world)
@@ -11,6 +12,8 @@ Game::Game()
 
 	reset();
 }
+
+Game::~Game() = default;
 
 void Game::reset()
 {
@@ -81,4 +84,61 @@ void Game::pause()
 void Game::nextStep()
 {
 	state.setMode(ONESTEP);
+}
+
+
+void Game::run(bool initial)
+{
+	if (initial)
+	{
+		learningRule.reset(createLearningRate());
+		//learningResult.reset(learningRule->start());
+	}
+	else
+	{
+		//learningResult.reset(learningRule->resume());
+	}
+
+	learningRule->initializeBeforeStart();
+	getLearningState().addTry();
+
+	while(isRunning())
+	{
+		step();
+		getLearningState().iterations++;
+	}
+
+	if (isPausing())
+		pausingFinished();
+	else
+		finished();
+}
+
+
+
+std::string Game::getOriginalName() const
+{
+	return "Game";
+}
+
+std::string Game::getDescription() const
+{
+	return "A game!";
+}
+
+
+LightBulb::AbstractTrainingPlan* Game::createNewFromSameType() const
+{
+	return new Game();
+}
+
+
+std::string Game::getLearningRuleName() const
+{
+	return LightBulb::DQNLearningRule::getName();
+}
+
+LightBulb::AbstractLearningRule* Game::createLearningRate()
+{
+	return learningController.createLearningRule();
 }
